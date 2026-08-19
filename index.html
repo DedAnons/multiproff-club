@@ -126,7 +126,6 @@
         chronicle: "Main/Essence",
         rates: "Multiprof",
         date: "28 Авг 2026",
-        status: "upcoming",
         isVip: false,
         url: "https://risen-worlds.net/",
         features: ["Изучения умений экипировки", "Перерождения", "Сервер со стадиями"],
@@ -138,7 +137,6 @@
         chronicle: "Interlude",
         rates: "x10",
         date: "14 Авг 2026",
-        status: "opened",
         isVip: false,
         url: "https://arcaide.fun/",
         features: ["Стаксаб 1+3", "Дополнения", "Перерождения"],
@@ -150,7 +148,6 @@
         chronicle: "High Five",
         rates: "x75",
         date: "14 Авг 2026",
-        status: "opened",
         isVip: false,
         url: "https://coldwar24.ru/",
         features: ["Стаксаб 1+5", "Без штрафа на грейд", "Автофарм / Нулы", "Крафт Дополнений", "ПА х2-х5"],
@@ -162,7 +159,6 @@
         chronicle: "Main/Essence",
         rates: "x10",
         date: "21 Авг 2026",
-        status: "upcoming",
         isVip: false,
         url: "https://multi-classic.top/",
         features: ["Нулы и Апы", "Апонулы", "Скиллы за Нулы", "Брошки и Камни", "Классический цикл"],
@@ -174,7 +170,6 @@
         chronicle: "Main/Essence",
         rates: "x1",
         date: "21 Авг 2026",
-        status: "upcoming",
         isVip: false,
         url: "https://rosemulti.ru/",
         features: ["Перерождения", "Пассивные баффы", "Оффлайн фарм", "TG Бот", "Увеличенный спавн мобов"],
@@ -186,7 +181,6 @@
         chronicle: "Interlude",
         rates: "x2",
         date: "28 Авг 2026",
-        status: "upcoming",
         isVip: false,
         url: "https://multi.ws/",
         features: ["Мультипрофа", "Разрешен бот", "Автофарм", "Клан скиллы", "Костюмы", "Бесконечные соски"],
@@ -198,7 +192,6 @@
         chronicle: "Interlude",
         rates: "x5",
         date: "22 Авг 2026",
-        status: "upcoming",
         isVip: false,
         url: "https://абрикоска.ком",
         features: ["Стаксаб", "Автофарм", "Бафф 24ч", "Апгрейд шмота"],
@@ -210,7 +203,6 @@
         chronicle: "Interlude",
         rates: "x13",
         date: "28 Авг 2026",
-        status: "upcoming",
         isVip: false,
         url: "#",
         features: ["Мультипрофа", "Кастомные скиллы", "Autofarm"],
@@ -233,6 +225,31 @@
     let servers = [];
     let currentChronicleFilter = 'ALL';
 
+    // Вспомогательная функция перевода строки типа "28 Авг 2026" в объект Date
+    function parseServerDate(dateStr) {
+      if (!dateStr) return new Date(0);
+      const months = {
+        'Янв': 0, 'Фев': 1, 'Мар': 2, 'Апр': 3, 'Май': 4, 'Июн': 5,
+        'Июл': 6, 'Авг': 7, 'Сен': 8, 'Окт': 9, 'Ноя': 10, 'Дек': 11
+      };
+      
+      const parts = dateStr.trim().split(' ');
+      const day = parseInt(parts[0]) || 1;
+      const month = months[parts[1]] !== undefined ? months[parts[1]] : 0;
+      const year = parseInt(parts[2]) || 2026;
+      
+      return new Date(year, month, day);
+    }
+
+    // Проверка, открылся ли сервер
+    function isServerOpened(dateStr) {
+      const serverDate = parseServerDate(dateStr);
+      const currentDate = new Date();
+      // Очищаем время для корректного сравнения по дням
+      currentDate.setHours(0, 0, 0, 0);
+      return currentDate >= serverDate;
+    }
+
     function initData() {
       if (GOOGLE_SHEET_CSV_URL && !GOOGLE_SHEET_CSV_URL.includes('ВСТАВЬ_СЮДА')) {
         Papa.parse(GOOGLE_SHEET_CSV_URL, {
@@ -245,7 +262,6 @@
               chronicle: item.chronicle || '',
               rates: item.rates || '',
               date: item.date || '',
-              status: item.status ? item.status.trim().toLowerCase() : 'upcoming',
               isVip: item.isVip ? item.isVip.trim().toUpperCase() === 'TRUE' : false,
               url: item.url || '#',
               features: item.features ? item.features.split(',').map(f => f.trim()) : [],
@@ -261,24 +277,6 @@
       }
     }
 
-    // Проверка, открылся ли сервер по дате
-    function isServerOpened(dateStr) {
-      const months = {
-        'Янв': 0, 'Фев': 1, 'Мар': 2, 'Апр': 3, 'Май': 4, 'Июн': 5,
-        'Июл': 6, 'Авг': 7, 'Сен': 8, 'Окт': 9, 'Ноя': 10, 'Дек': 11
-      };
-      
-      const parts = dateStr.split(' ');
-      const day = parseInt(parts[0]);
-      const month = months[parts[1]];
-      const year = parseInt(parts[2]);
-      
-      const serverDate = new Date(year, month, day);
-      const currentDate = new Date();
-      
-      return currentDate >= serverDate;
-    }
-
     function renderServers() {
       const vipContainer = document.getElementById('vip-container');
       const upcomingContainer = document.getElementById('upcoming-list');
@@ -290,6 +288,7 @@
 
       const filtered = servers.filter(s => currentChronicleFilter === 'ALL' || s.chronicle === currentChronicleFilter);
 
+      // 1. Отображение VIP сервера
       const vipServer = filtered.find(s => s.isVip);
       if (vipServer) {
         vipContainer.innerHTML = createServerCardHtml(vipServer, true);
@@ -304,13 +303,26 @@
         `;
       }
 
-      filtered.filter(s => !s.isVip).forEach(server => {
-        const cardHtml = createServerCardHtml(server, false);
-        if (isServerOpened(server.date)) {
-          openedContainer.innerHTML += cardHtml;
-        } else {
-          upcomingContainer.innerHTML += cardHtml;
-        }
+      // 2. Разделение на "Предстоящие" и "Открытые"
+      const nonVipServers = filtered.filter(s => !s.isVip);
+      
+      const upcomingServers = nonVipServers.filter(s => !isServerOpened(s.date));
+      const openedServers = nonVipServers.filter(s => isServerOpened(s.date));
+
+      // 3. Автоматическая СОРТИРОВКА ПО ДАТАМ:
+      // Скоро открытие: по возрастанию (самые ближайшие сверху)
+      upcomingServers.sort((a, b) => parseServerDate(a.date) - parseServerDate(b.date));
+      
+      // Уже открылись: по убыванию (самые свежие открывшиеся сверху)
+      openedServers.sort((a, b) => parseServerDate(b.date) - parseServerDate(a.date));
+
+      // 4. Отрисовка списков
+      upcomingServers.forEach(server => {
+        upcomingContainer.innerHTML += createServerCardHtml(server, false);
+      });
+
+      openedServers.forEach(server => {
+        openedContainer.innerHTML += createServerCardHtml(server, false);
       });
     }
 
