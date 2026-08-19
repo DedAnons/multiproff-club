@@ -49,16 +49,24 @@
 
   <div class="max-w-7xl mx-auto w-full">
     
-    <!-- Шапка с кнопкой Связь -->
+    <!-- Шапка с кнопками переключения языка и связи -->
     <header class="relative text-center mb-8 border-b border-slate-700/50 pb-6 flex flex-col items-center justify-center">
       
-      <!-- Кнопка Telegram (Связь) -->
-      <div class="md:absolute md:right-0 md:top-2 mb-4 md:mb-0">
+      <!-- Панель управления справа (Переключатель языков + Telegram) -->
+      <div class="md:absolute md:right-0 md:top-2 mb-4 md:mb-0 flex items-center gap-3">
+        
+        <!-- Переключатель языка -->
+        <div class="glass-panel p-1 rounded-lg border border-slate-700/60 flex items-center gap-1 text-xs font-bold">
+          <button id="btn-lang-ru" onclick="setLanguage('ru')" class="px-2.5 py-1 rounded transition">RU</button>
+          <button id="btn-lang-en" onclick="setLanguage('en')" class="px-2.5 py-1 rounded transition">EN</button>
+        </div>
+
+        <!-- Кнопка Telegram (Связь) -->
         <a href="https://t.me/Misterpandatipa" target="_blank" class="glass-panel hover:bg-sky-500/20 text-sky-400 border border-sky-500/40 hover:border-sky-400 px-3.5 py-1.5 rounded-lg text-sm font-semibold transition inline-flex items-center gap-2 shadow-sm">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
             <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.119.098.152.228.166.322.016.108.035.334.02.514z"/>
           </svg>
-          Связь
+          <span id="txt-contact">Связь</span>
         </a>
       </div>
 
@@ -72,7 +80,7 @@
 
     <!-- Фильтры Хроник -->
     <div class="flex flex-wrap gap-2 justify-center mb-6">
-      <button onclick="filterChronicle('ALL')" class="glass-panel hover:bg-slate-700/80 text-slate-200 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50">Все</button>
+      <button onclick="filterChronicle('ALL')" class="glass-panel hover:bg-slate-700/80 text-slate-200 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50" id="filter-all">Все</button>
       <button onclick="filterChronicle('Interlude')" class="glass-panel hover:bg-slate-700/80 text-amber-400 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50">Interlude</button>
       <button onclick="filterChronicle('High Five')" class="glass-panel hover:bg-slate-700/80 text-amber-400 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50">High Five</button>
       <button onclick="filterChronicle('Main/Essence')" class="glass-panel hover:bg-slate-700/80 text-amber-400 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50">Essence / Main</button>
@@ -85,7 +93,7 @@
       <div>
         <h2 class="text-lg font-bold text-emerald-400 mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          Скоро открытие
+          <span id="title-upcoming">Скоро открытие</span>
         </h2>
         <div id="upcoming-list" class="space-y-3"></div>
       </div>
@@ -94,7 +102,7 @@
       <div>
         <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-          Уже открылись
+          <span id="title-opened">Уже открылись</span>
         </h2>
         <div id="opened-list" class="space-y-3"></div>
       </div>
@@ -105,19 +113,58 @@
 
   <!-- Подвал сайта (Footer) -->
   <footer style="background-color: rgba(18, 18, 18, 0.85); color: #888; padding: 20px; font-family: sans-serif; font-size: 12px; text-align: center; line-height: 1.6; border-top: 1px solid rgba(255, 255, 255, 0.05);" class="mt-auto rounded-t-xl backdrop-blur-md">
-    <p style="margin: 0 0 8px 0;">
+    <p id="footer-info" style="margin: 0 0 8px 0;">
       Сведения, размещенные на сайте, носят исключительно информационно-ознакомительный характер.
     </p>
     <p style="margin: 0 0 8px 0;">
       Lineage II is a registered trademark of NCSoft Corporation.
     </p>
     <p style="margin: 0;">
-      <a href="https://t.me/Misterpandatipa" target="_blank" style="color: #aaa; text-decoration: underline;">Контакты</a>
+      <a href="https://t.me/Misterpandatipa" target="_blank" id="footer-contacts" style="color: #aaa; text-decoration: underline;">Контакты</a>
     </p>
   </footer>
 
   <script>
     const GOOGLE_SHEET_CSV_URL = '';
+
+    // Тексты для локализации UI
+    const i18n = {
+      ru: {
+        contact: "Связь",
+        filterAll: "Все",
+        titleUpcoming: "Скоро открытие",
+        titleOpened: "Уже открылись",
+        vipTitle: "МЕСТО ДЛЯ VIP РЕКЛАМЫ",
+        vipDesc: "Закрепите ваш сервер на самом видном месте анонсера",
+        details: "Подробнее",
+        visitWebsite: "Перейти на сайт",
+        footerInfo: "Сведения, размещенные на сайте, носят исключительно информационно-ознакомительный характер.",
+        footerContacts: "Контакты",
+        statusOnline: "Онлайн / Открыт",
+        statusUpcoming: "Скоро открытие"
+      },
+      en: {
+        contact: "Contact",
+        filterAll: "All",
+        titleUpcoming: "Upcoming Releases",
+        titleOpened: "Already Opened",
+        vipTitle: "VIP ADVERTISEMENT PLACE",
+        vipDesc: "Pin your server at the top of the announcer list",
+        details: "Details",
+        visitWebsite: "Visit Website",
+        footerInfo: "The information provided on this site is for informational purposes only.",
+        footerContacts: "Contacts",
+        statusOnline: "Online / Opened",
+        statusUpcoming: "Upcoming release"
+      }
+    };
+
+    let currentLang = localStorage.getItem('multiproff_lang') || 'ru';
+
+    const monthNames = {
+      ru: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+      en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    };
 
     let defaultServers = [
       {
@@ -128,8 +175,14 @@
         date: "28 Авг 2026",
         isVip: false,
         url: "https://risen-worlds.net/",
-        features: ["Изучения умений экипировки", "Перерождения", "Сервер со стадиями"],
-        desc: "Shield Of Kingdom на новом клиенте с глубокой оптимизацией интерфейса. Концепт изучения бонусов экипировки и эпика в пассивки. 8 глав развитие от C4 до GOD со сменой стадий в live-режиме (без рестартов). Гибкая система нулов с рандомными требованиями, оповещения и телепорты к эпик боссам с наградами за урон. Главное удобство: ресурсы и рецепты подтягиваются напрямую из доп. сумок!"
+        features: {
+          ru: ["Изучения умений экипировки", "Перерождения", "Сервер со стадиями"],
+          en: ["Equipment Skills Study", "Rebirths", "Staged Server"]
+        },
+        desc: {
+          ru: "Shield Of Kingdom на новом клиенте с глубокой оптимизацией интерфейса. Концепт изучения бонусов экипировки и эпика в пассивки. 8 глав развитие от C4 до GOD со сменой стадий в live-режиме (без рестартов). Гибкая система нулов с рандомными требованиями, оповещения и телепорты к эпик боссам с наградами за урон. Главное удобство: ресурсы и рецепты подтягиваются напрямую из доп. сумок!",
+          en: "Shield Of Kingdom on a new client with deep UI optimization. Learn equipment and epic boss bonuses into passive skills. 8 stages from C4 to GOD with live stage changes (no restarts). Flexible rebirth system with dynamic requirements, epic boss notifications and teleporting with damage rewards. Main QoL: resources & recipes auto-pull directly from extra bags!"
+        }
       },
       {
         id: 8,
@@ -139,8 +192,14 @@
         date: "14 Авг 2026",
         isVip: false,
         url: "https://arcaide.fun/",
-        features: ["Стаксаб 1+3", "Дополнения", "Перерождения"],
-        desc: "Interlude x10 со стаксабом (1+3). Крылья, тату и большое количество новой экипировки, брони и оружия. Механика нулов: переродись и получи Rebirth Coin для апгрейдов и изучения дополнительных умений. GM-Shop до S Grade со всеми расходниками и бафер с баффами на 1 час."
+        features: {
+          ru: ["Стаксаб 1+3", "Дополнения", "Перерождения"],
+          en: ["Stacksub 1+3", "Custom Content", "Rebirths"]
+        },
+        desc: {
+          ru: "Interlude x10 со стаксабом (1+3). Крылья, тату и большое количество новой экипировки, брони и оружия. Механика нулов: переродись и получи Rebirth Coin для апгрейдов и изучения дополнительных умений. GM-Shop до S Grade со всеми расходниками и бафер с баффами на 1 час.",
+          en: "Interlude x10 with stacksub (1+3). Wings, tattoos, custom armor, and weapons. Rebirth mechanics: gain Rebirth Coins for upgrades and auxiliary skills. S-Grade GM Shop with all consumables and 1-hour buffers."
+        }
       },
       {
         id: 7,
@@ -150,8 +209,14 @@
         date: "14 Авг 2026",
         isVip: false,
         url: "https://coldwar24.ru/",
-        features: ["Стаксаб 1+5", "Без штрафа на грейд", "Автофарм / Нулы", "Крафт Дополнений", "ПА х2-х5"],
-        desc: "High Five x75 со стаксабом (1+5, макс уровень 85). Автоизучение скиллов 1-80. Нет штрафа на грейд шмота, но есть штраф на мобов (9 уровней). Доступны автофарм, нулы, апы и многоуровневый крафт дополнений (1-10 уровень)."
+        features: {
+          ru: ["Стаксаб 1+5", "Без штрафа на грейд", "Автофарм / Нулы", "Крафт Дополнений", "ПА х2-х5"],
+          en: ["Stacksub 1+5", "No Grade Penalty", "Autofarm / Rebirths", "Custom Craft", "PA x2-x5"]
+        },
+        desc: {
+          ru: "High Five x75 со стаксабом (1+5, макс уровень 85). Автоизучение скиллов 1-80. Нет штрафа на грейд шмота, но есть штраф на мобов (9 уровней). Доступны автофарм, нулы, апы и многоуровневый крафт дополнений (1-10 уровень).",
+          en: "High Five x75 with stacksub (1+5, max lvl 85). Auto-learn skills 1-80. No item grade penalty. Features autofarm, rebirths, and 10-tier custom gear crafting."
+        }
       },
       {
         id: 6,
@@ -161,8 +226,14 @@
         date: "21 Авг 2026",
         isVip: false,
         url: "https://multi-classic.top/",
-        features: ["Нулы и Апы", "Апонулы", "Скиллы за Нулы", "Брошки и Камни", "Классический цикл"],
-        desc: "Проверенная временем концепция мультипрофы на Classic x10! Полный спектр развития: нулы, апы, апонулы. Новые скиллы (Аппетит и др.) за монетки с нулов. Брошки, драгоценные камни и глубокая прокачка."
+        features: {
+          ru: ["Нулы и Апы", "Апонулы", "Скиллы за Нулы", "Брошки и Камни", "Классический цикл"],
+          en: ["Rebirths & Upgrades", "Apo-Rebirths", "Rebirth Skills", "Brooches & Jewels", "Classic Cycle"]
+        },
+        desc: {
+          ru: "Проверенная временем концепция мультипрофы на Classic x10! Полный спектр развития: нулы, апы, апонулы. Новые скиллы (Аппетит и др.) за монетки с нулов. Брошки, драгоценные камни и глубокая прокачка.",
+          en: "Time-tested multiproff concept on Classic x10! Full progression loop: rebirths, upgrades, apo-rebirths. Custom skills bought via rebirth tokens. Brooches, jewels, and deep character development."
+        }
       },
       {
         id: 5,
@@ -172,8 +243,14 @@
         date: "21 Авг 2026",
         isVip: false,
         url: "https://rosemulti.ru/",
-        features: ["Перерождения", "Пассивные баффы", "Оффлайн фарм", "TG Бот", "Увеличенный спавн мобов"],
-        desc: "Новые хроники RoseVain с уникальным классом на Essence! Скиллы за перерождения, удобный оффлайн фарм с TG ботом. Положительные баффы переведены в пассивки. Увеличенное количество мобов на локациях и быстрый респ!"
+        features: {
+          ru: ["Перерождения", "Пассивные баффы", "Оффлайн фарм", "TG Бот", "Увеличенный спавн мобов"],
+          en: ["Rebirths", "Passive Buffs", "Offline Farming", "Telegram Bot", "Increased Mob Spawn"]
+        },
+        desc: {
+          ru: "Новые хроники RoseVain с уникальным классом на Essence! Скиллы за перерождения, удобный оффлайн фарм с TG ботом. Положительные баффы переведены в пассивки. Увеличенное количество мобов на локациях и быстрый респ!",
+          en: "New RoseVain chronicle with a unique class on Essence! Skills unlocked via rebirths, offline farming integrated with Telegram Bot. Buffs converted into passives. Fast mob spawns!"
+        }
       },
       {
         id: 4,
@@ -183,8 +260,14 @@
         date: "28 Авг 2026",
         isVip: false,
         url: "https://multi.ws/",
-        features: ["Мультипрофа", "Разрешен бот", "Автофарм", "Клан скиллы", "Костюмы", "Бесконечные соски"],
-        desc: "Интерлюд х2 с мультипрофой. Разрешен бот и привычный автофарм. Основные баффы перенесены в клан-скиллы, добавлены костюмы со статами, апы и нулы. При наличии ПА соски и стрелы бесконечные."
+        features: {
+          ru: ["Мультипрофа", "Разрешен бот", "Автофарм", "Клан скиллы", "Костюмы", "Бесконечные соски"],
+          en: ["Multiproff", "Bot Allowed", "Autofarm", "Clan Skills", "Costumes", "Infinite Shots"]
+        },
+        desc: {
+          ru: "Интерлюд х2 с мультипрофой. Разрешен бот и привычный автофарм. Основные баффы перенесены в клан-скиллы, добавлены костюмы со статами, апы и нулы. При наличии ПА соски и стрелы бесконечные.",
+          en: "Interlude x2 multiproff. Legal botting & autofarm. Essential buffs placed into clan skills. Custom stat costumes, rebirths, and unlimited shots/arrows with Premium Account."
+        }
       },
       {
         id: 1,
@@ -194,8 +277,14 @@
         date: "22 Авг 2026",
         isVip: false,
         url: "https://абрикоска.ком",
-        features: ["Стаксаб", "Автофарм", "Бафф 24ч", "Апгрейд шмота"],
-        desc: "Свежий Interlude x5 со стаксабом! На сервере доступен удобный автофарм, бафф на 24 часа и система апгрейда экипировки для комфортного развития."
+        features: {
+          ru: ["Стаксаб", "Автофарм", "Бафф 24ч", "Апгрейд шмота"],
+          en: ["Stacksub", "Autofarm", "24h Buffs", "Gear Upgrades"]
+        },
+        desc: {
+          ru: "Свежий Interlude x5 со стаксабом! На сервере доступен удобный автофарм, бафф на 24 часа и система апгрейда экипировки для комфортного развития.",
+          en: "Fresh Interlude x5 with stacksub! Features comfortable autofarming, 24-hour buffs, and gear upgrade progression."
+        }
       },
       {
         id: 2,
@@ -205,8 +294,14 @@
         date: "28 Авг 2026",
         isVip: false,
         url: "#",
-        features: ["Мультипрофа", "Кастомные скиллы", "Autofarm"],
-        desc: "Топовый сервер с уникальной механикой мультипрофессии! Огромный выбор комбинаций скиллов и сбалансированная пвп-арена."
+        features: {
+          ru: ["Мультипрофа", "Кастомные скиллы", "Autofarm"],
+          en: ["Multiproff", "Custom Skills", "Autofarm"]
+        },
+        desc: {
+          ru: "Топовый сервер с уникальной механикой мультипрофессии! Огромный выбор комбинаций скиллов и сбалансированная пвп-арена.",
+          en: "Top-tier server featuring unique multiproff mechanics! Massive skill combinations and balanced PvP arena."
+        }
       },
       {
         id: 3,
@@ -214,43 +309,87 @@
         chronicle: "High Five",
         rates: "x50",
         date: "10 Авг 2026",
-        status: "opened",
         isVip: false,
         url: "#",
-        features: ["Solo / Party", "Custom Costumes"],
-        desc: "Огромный онлайн, стабильный проект. Добавлены уникальные ивенты и переработанные зоны спойла."
+        features: {
+          ru: ["Solo / Party", "Custom Costumes"],
+          en: ["Solo / Party", "Custom Costumes"]
+        },
+        desc: {
+          ru: "Огромный онлайн, стабильный проект. Добавлены уникальные ивенты и переработанные зоны спойла.",
+          en: "High online population and stable project. Features unique events and reworked spoil zones."
+        }
       }
     ];
 
     let servers = [];
     let currentChronicleFilter = 'ALL';
 
-    // Вспомогательная функция перевода строки типа "28 Авг 2026" в объект Date
     function parseServerDate(dateStr) {
       if (!dateStr) return new Date(0);
-      const months = {
+      const allMonths = {
         'Янв': 0, 'Фев': 1, 'Мар': 2, 'Апр': 3, 'Май': 4, 'Июн': 5,
-        'Июл': 6, 'Авг': 7, 'Сен': 8, 'Окт': 9, 'Ноя': 10, 'Дек': 11
+        'Июл': 6, 'Авг': 7, 'Сен': 8, 'Окт': 9, 'Ноя': 10, 'Дек': 11,
+        'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+        'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
       };
       
       const parts = dateStr.trim().split(' ');
       const day = parseInt(parts[0]) || 1;
-      const month = months[parts[1]] !== undefined ? months[parts[1]] : 0;
+      const month = allMonths[parts[1]] !== undefined ? allMonths[parts[1]] : 0;
       const year = parseInt(parts[2]) || 2026;
       
       return new Date(year, month, day);
     }
 
-    // Проверка, открылся ли сервер
+    function formatDateForLang(dateStr, lang) {
+      const dateObj = parseServerDate(dateStr);
+      const day = dateObj.getDate();
+      const month = monthNames[lang][dateObj.getMonth()];
+      const year = dateObj.getFullYear();
+      return `${day} ${month} ${year}`;
+    }
+
     function isServerOpened(dateStr) {
       const serverDate = parseServerDate(dateStr);
       const currentDate = new Date();
-      // Очищаем время для корректного сравнения по дням
       currentDate.setHours(0, 0, 0, 0);
       return currentDate >= serverDate;
     }
 
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('multiproff_lang', lang);
+      updateLanguageUI();
+      renderServers();
+    }
+
+    function updateLanguageUI() {
+      const t = i18n[currentLang];
+      
+      document.getElementById('txt-contact').innerText = t.contact;
+      document.getElementById('filter-all').innerText = t.filterAll;
+      document.getElementById('title-upcoming').innerText = t.titleUpcoming;
+      document.getElementById('title-opened').innerText = t.titleOpened;
+      document.getElementById('footer-info').innerText = t.footerInfo;
+      document.getElementById('footer-contacts').innerText = t.footerContacts;
+
+      // Переключение подсветки кнопок языков
+      const btnRu = document.getElementById('btn-lang-ru');
+      const btnEn = document.getElementById('btn-lang-en');
+
+      if (currentLang === 'ru') {
+        btnRu.className = "px-2.5 py-1 rounded bg-amber-400 text-slate-950 font-bold transition shadow-sm";
+        btnEn.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white transition";
+      } else {
+        btnEn.className = "px-2.5 py-1 rounded bg-amber-400 text-slate-950 font-bold transition shadow-sm";
+        btnRu.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white transition";
+      }
+    }
+
     function initData() {
+      updateLanguageUI();
+
       if (GOOGLE_SHEET_CSV_URL && !GOOGLE_SHEET_CSV_URL.includes('ВСТАВЬ_СЮДА')) {
         Papa.parse(GOOGLE_SHEET_CSV_URL, {
           download: true,
@@ -264,8 +403,14 @@
               date: item.date || '',
               isVip: item.isVip ? item.isVip.trim().toUpperCase() === 'TRUE' : false,
               url: item.url || '#',
-              features: item.features ? item.features.split(',').map(f => f.trim()) : [],
-              desc: item.desc || ''
+              features: {
+                ru: item.features ? item.features.split(',').map(f => f.trim()) : [],
+                en: item.features_en ? item.features_en.split(',').map(f => f.trim()) : (item.features ? item.features.split(',').map(f => f.trim()) : [])
+              },
+              desc: {
+                ru: item.desc || '',
+                en: item.desc_en || item.desc || ''
+              }
             })).filter(s => s.name !== '');
 
             renderServers();
@@ -278,6 +423,7 @@
     }
 
     function renderServers() {
+      const t = i18n[currentLang];
       const vipContainer = document.getElementById('vip-container');
       const upcomingContainer = document.getElementById('upcoming-list');
       const openedContainer = document.getElementById('opened-list');
@@ -288,7 +434,7 @@
 
       const filtered = servers.filter(s => currentChronicleFilter === 'ALL' || s.chronicle === currentChronicleFilter);
 
-      // 1. Отображение VIP сервера
+      // VIP Блок
       const vipServer = filtered.find(s => s.isVip);
       if (vipServer) {
         vipContainer.innerHTML = createServerCardHtml(vipServer, true);
@@ -296,27 +442,21 @@
         vipContainer.innerHTML = `
           <div class="glass-panel border-2 border-dashed border-amber-400/50 rounded-xl p-5 text-center shadow-lg transition hover:border-amber-400">
             <div class="text-amber-400 text-base font-bold mb-0.5">
-              МЕСТО ДЛЯ VIP РЕКЛАМЫ
+              ${t.vipTitle}
             </div>
-            <p class="text-slate-300 text-xs">Закрепите ваш сервер на самом видном месте анонсера</p>
+            <p class="text-slate-300 text-xs">${t.vipDesc}</p>
           </div>
         `;
       }
 
-      // 2. Разделение на "Предстоящие" и "Открытые"
+      // Сортировка и разделение
       const nonVipServers = filtered.filter(s => !s.isVip);
-      
       const upcomingServers = nonVipServers.filter(s => !isServerOpened(s.date));
       const openedServers = nonVipServers.filter(s => isServerOpened(s.date));
 
-      // 3. Автоматическая СОРТИРОВКА ПО ДАТАМ:
-      // Скоро открытие: по возрастанию (самые ближайшие сверху)
       upcomingServers.sort((a, b) => parseServerDate(a.date) - parseServerDate(b.date));
-      
-      // Уже открылись: по убыванию (самые свежие открывшиеся сверху)
       openedServers.sort((a, b) => parseServerDate(b.date) - parseServerDate(a.date));
 
-      // 4. Отрисовка списков
       upcomingServers.forEach(server => {
         upcomingContainer.innerHTML += createServerCardHtml(server, false);
       });
@@ -327,6 +467,7 @@
     }
 
     function createServerCardHtml(server, isVip) {
+      const t = i18n[currentLang];
       const borderClass = isVip 
         ? 'vip-card border-2 border-amber-400' 
         : 'glass-panel hover:bg-slate-900/90 border border-slate-700/60';
@@ -340,13 +481,19 @@
       const statusDot = serverOpened 
         ? `<span class="relative flex h-2.5 w-2.5">
              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" title="Онлайн / Открыт"></span>
+             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" title="${t.statusOnline}"></span>
            </span>`
-        : `<span class="inline-flex rounded-full h-2.5 w-2.5 bg-amber-400" title="Скоро открытие"></span>`;
+        : `<span class="inline-flex rounded-full h-2.5 w-2.5 bg-amber-400" title="${t.statusUpcoming}"></span>`;
 
-      const featuresHtml = server.features.map(f => 
+      // Получаем теги и описание согласно текущей мове
+      const activeFeatures = (server.features && server.features[currentLang]) ? server.features[currentLang] : (server.features.ru || []);
+      const activeDesc = (server.desc && server.desc[currentLang]) ? server.desc[currentLang] : (server.desc.ru || '');
+
+      const featuresHtml = activeFeatures.map(f => 
         `<span class="bg-slate-950/80 border border-slate-700/80 text-[11px] text-amber-400 px-1.5 py-0.5 rounded">${f}</span>`
       ).join('');
+
+      const formattedDate = formatDateForLang(server.date, currentLang);
 
       return `
         <div class="${borderClass} rounded-xl transition overflow-hidden relative shadow-lg">
@@ -366,8 +513,8 @@
             
             <div class="flex items-center gap-4">
               <div class="text-right">
-                <div class="text-xs font-semibold text-slate-200">${server.date}</div>
-                <span class="text-[10px] text-amber-400">Подробнее</span>
+                <div class="text-xs font-semibold text-slate-200">${formattedDate}</div>
+                <span class="text-[10px] text-amber-400">${t.details}</span>
               </div>
               <span id="arrow-${server.id}" class="text-slate-400 text-[10px] transition-transform duration-300 transform inline-block">▼</span>
             </div>
@@ -380,11 +527,11 @@
                   ${featuresHtml}
                 </div>
                 <p class="text-slate-300 text-xs leading-relaxed mb-3">
-                  ${server.desc}
+                  ${activeDesc}
                 </p>
                 <div class="flex justify-end">
                   <a href="${server.url}" target="_blank" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-3.5 py-1.5 rounded-lg transition inline-flex items-center gap-1">
-                    Перейти на сайт &rarr;
+                    ${t.visitWebsite} &rarr;
                   </a>
                 </div>
               </div>
