@@ -9,6 +9,11 @@
   <!-- PapaParse для чтения Google Таблиц -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <style>
+    /* 100% ФИКС: Принудительный скроллбар навсегда убирает дёргание сайта */
+    html {
+      overflow-y: scroll;
+    }
+
     /* Фоновое изображение (HD арт) */
     body {
       background-color: #0b0f19;
@@ -20,9 +25,6 @@
       background-position: center;
       background-attachment: fixed;
       background-repeat: no-repeat;
-
-      /* Фикс смещения сайта при появлении скроллбара */
-      scrollbar-gutter: stable;
     }
     
     /* Эффект матового стекла для карточек (Glassmorphism) */
