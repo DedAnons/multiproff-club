@@ -1,0 +1,15 @@
+{
+  "name": "multiproff-club",
+  "version": "1.0.0",
+  "description": "Multiproff Club - L2 Server Announcer",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "keywords": ["lineage2", "l2", "server"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  }
+}
