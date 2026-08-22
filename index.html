@@ -8,6 +8,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- PapaParse для чтения Google Таблиц -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <!-- VK OpenAPI SDK для чата -->
+  <script src="https://vk.com/js/api/openapi.js?169" type="text/javascript"></script>
+
   <style>
     /* 100% ФИКС: Принудительный скроллбар навсегда убирает дёргание сайта */
     html {
@@ -118,6 +121,9 @@
 
   </div>
 
+  <!-- Виджет сообщений ВКонтакте -->
+  <div id="vk_community_messages"></div>
+
   <!-- Подвал сайта (Footer) без фона -->
   <footer class="mt-auto w-full py-4 px-5 text-center font-sans text-xs text-slate-400/80 leading-relaxed border-t border-slate-700/30">
     <p id="footer-info" class="m-0 mb-1">
@@ -134,6 +140,16 @@
 
   <script>
     const GOOGLE_SHEET_CSV_URL = '';
+
+    // Инициализация виджета VK Чат для группы 232470500 (clubmultiproff)
+    try {
+      VK.Widgets.CommunityMessages("vk_community_messages", 232470500, {
+        tooltipButtonText: "Есть вопросы?",
+        expandTimeout: 5000
+      });
+    } catch (e) {
+      console.log("VK Chat Init Error:", e);
+    }
 
     // Тексты для локализации UI
     const i18n = {
@@ -379,7 +395,6 @@
       document.getElementById('title-opened').innerText = t.titleOpened;
       document.getElementById('footer-info').innerText = t.footerInfo;
 
-      // Переключение подсветки кнопок языков
       const btnRu = document.getElementById('btn-lang-ru');
       const btnEn = document.getElementById('btn-lang-en');
 
@@ -490,7 +505,6 @@
            </span>`
         : `<span class="inline-flex rounded-full h-2.5 w-2.5 bg-amber-400" title="${t.statusUpcoming}"></span>`;
 
-      // Получаем теги и описание согласно текущему языку
       const activeFeatures = (server.features && server.features[currentLang]) ? server.features[currentLang] : (server.features.ru || []);
       const activeDesc = (server.desc && server.desc[currentLang]) ? server.desc[currentLang] : (server.desc.ru || '');
 
