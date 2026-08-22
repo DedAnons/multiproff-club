@@ -55,18 +55,20 @@
 
   <div class="max-w-7xl mx-auto w-full mb-8">
     
-    <!-- Шапка с кнопками переключения языка и соцсетями -->
+    <!-- Шапка сайта -->
     <header class="relative text-center mb-8 border-b border-slate-700/50 pb-6 flex flex-col items-center justify-center">
       
-      <!-- Панель управления справа (Переключатель языков + Кнопки соцсетей) -->
-      <div class="md:absolute md:right-0 md:top-2 mb-4 md:mb-0 flex flex-wrap items-center justify-center gap-2.5">
-        
-        <!-- Переключатель языка -->
+      <!-- Переключатель языка (Слевой стороны) -->
+      <div class="md:absolute md:left-0 md:top-2 mb-4 md:mb-0">
         <div class="glass-panel p-1 rounded-lg border border-slate-700/60 flex items-center gap-1 text-xs font-bold">
           <button id="btn-lang-ru" onclick="setLanguage('ru')" class="px-2.5 py-1 rounded transition">RU</button>
           <button id="btn-lang-en" onclick="setLanguage('en')" class="px-2.5 py-1 rounded transition">EN</button>
         </div>
+      </div>
 
+      <!-- Кнопки соцсетей (Справой стороны) -->
+      <div class="md:absolute md:right-0 md:top-2 mb-4 md:mb-0 flex flex-wrap items-center justify-center gap-2.5">
+        
         <!-- Кнопка VK (Мы ВКонтакте) -->
         <a href="https://vk.ru/clubmultiproff" target="_blank" rel="noopener noreferrer" class="glass-panel hover:bg-blue-600/20 text-blue-400 border border-blue-500/40 hover:border-blue-400 px-3.5 py-1.5 rounded-lg text-sm font-semibold transition inline-flex items-center gap-2 shadow-sm">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -75,12 +77,12 @@
           <span id="txt-vk">Мы Вконтакте</span>
         </a>
 
-        <!-- Кнопка Telegram (Написать в Телеграм) -->
+        <!-- Кнопка Telegram (Связь) -->
         <a href="https://t.me/Misterpandatipa" target="_blank" rel="noopener noreferrer" class="glass-panel hover:bg-sky-500/20 text-sky-400 border border-sky-500/40 hover:border-sky-400 px-3.5 py-1.5 rounded-lg text-sm font-semibold transition inline-flex items-center gap-2 shadow-sm">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
             <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.119.098.152.228.166.322.016.108.035.334.02.514z"/>
           </svg>
-          <span id="txt-contact">Написать в Телеграм</span>
+          <span id="txt-contact">Связь</span>
         </a>
 
       </div>
@@ -128,7 +130,7 @@
 
   </div>
 
-  <!-- Подвал сайта (Footer) без фона -->
+  <!-- Подвал сайта (Footer) -->
   <footer class="mt-auto w-full py-4 px-5 text-center font-sans text-xs text-slate-400/80 leading-relaxed border-t border-slate-700/30">
     <p id="footer-info" class="m-0 mb-1">
       Сведения, размещенные на сайте, носят исключительно информационно-ознакомительный характер.
@@ -136,7 +138,6 @@
     <p class="m-0 mb-1">
       Lineage II is a registered trademark of NCSoft Corporation.
     </p>
-    <!-- Блок указания автора арта -->
     <p class="m-0 text-slate-500">
       Background Art by <a href="https://www.artstation.com/philiera" target="_blank" rel="noopener noreferrer" class="text-amber-400/80 hover:text-amber-400 underline transition">Ekaterina Chesalova (Philiera)</a>
     </p>
@@ -148,7 +149,7 @@
     // Тексты для локализации UI
     const i18n = {
       ru: {
-        contact: "Написать в Телеграм",
+        contact: "Связь",
         vk: "Мы Вконтакте",
         filterAll: "Все",
         titleUpcoming: "Скоро открытие",
@@ -162,7 +163,7 @@
         statusUpcoming: "Скоро открытие"
       },
       en: {
-        contact: "Write in Telegram",
+        contact: "Contact",
         vk: "VK Community",
         filterAll: "All",
         titleUpcoming: "Upcoming Releases",
