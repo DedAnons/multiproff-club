@@ -8,8 +8,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- PapaParse для чтения Google Таблиц -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-  <!-- VK OpenAPI SDK для чата -->
-  <script src="https://vk.com/js/api/openapi.js?169" type="text/javascript"></script>
 
   <style>
     /* 100% ФИКС: Принудительный скроллбар навсегда убирает дёргание сайта */
@@ -57,11 +55,11 @@
 
   <div class="max-w-7xl mx-auto w-full mb-8">
     
-    <!-- Шапка с кнопками переключения языка и связи -->
+    <!-- Шапка с кнопками переключения языка и соцсетями -->
     <header class="relative text-center mb-8 border-b border-slate-700/50 pb-6 flex flex-col items-center justify-center">
       
-      <!-- Панель управления справа (Переключатель языков + Telegram) -->
-      <div class="md:absolute md:right-0 md:top-2 mb-4 md:mb-0 flex items-center gap-3">
+      <!-- Панель управления справа (Переключатель языков + Кнопки соцсетей) -->
+      <div class="md:absolute md:right-0 md:top-2 mb-4 md:mb-0 flex flex-wrap items-center justify-center gap-2.5">
         
         <!-- Переключатель языка -->
         <div class="glass-panel p-1 rounded-lg border border-slate-700/60 flex items-center gap-1 text-xs font-bold">
@@ -69,13 +67,22 @@
           <button id="btn-lang-en" onclick="setLanguage('en')" class="px-2.5 py-1 rounded transition">EN</button>
         </div>
 
+        <!-- Кнопка VK (Мы ВКонтакте) -->
+        <a href="https://vk.ru/clubmultiproff" target="_blank" rel="noopener noreferrer" class="glass-panel hover:bg-blue-600/20 text-blue-400 border border-blue-500/40 hover:border-blue-400 px-3.5 py-1.5 rounded-lg text-sm font-semibold transition inline-flex items-center gap-2 shadow-sm">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.862-.525-2.049-1.716-1.04-1.018-1.5-1.157-1.758-1.157-.36 0-.464.103-.464.601v1.643c0 .422-.137.629-1.25.629-1.849 0-3.9-1.121-5.344-3.21-2.175-3.09-2.774-5.418-2.774-5.895 0-.258.103-.497.601-.497h1.744c.447 0 .614.206.786.687.86 2.492 2.301 4.678 2.895 4.678.223 0 .326-.103.326-.667V9.752c-.069-1.186-.687-1.289-.687-1.717 0-.206.172-.412.447-.412h2.747c.369 0 .506.19.506.618v3.315c0 .36.163.481.266.481.223 0 .412-.12.824-.533 1.271-1.426 2.182-3.641 2.182-3.641.12-.257.343-.412.789-.412h1.744c.523 0 .637.266.523.636-.215.996-2.31 3.974-2.31 3.974-.189.309-.266.446 0 .807.189.266.807.789 1.22 1.271 1.059 1.22 1.865 2.241 2.08 2.952.12.36-.06.557-.575.557z"/>
+          </svg>
+          <span id="txt-vk">Мы Вконтакте</span>
+        </a>
+
         <!-- Кнопка Telegram (Связь) -->
-        <a href="https://t.me/Misterpandatipa" target="_blank" class="glass-panel hover:bg-sky-500/20 text-sky-400 border border-sky-500/40 hover:border-sky-400 px-3.5 py-1.5 rounded-lg text-sm font-semibold transition inline-flex items-center gap-2 shadow-sm">
+        <a href="https://t.me/Misterpandatipa" target="_blank" rel="noopener noreferrer" class="glass-panel hover:bg-sky-500/20 text-sky-400 border border-sky-500/40 hover:border-sky-400 px-3.5 py-1.5 rounded-lg text-sm font-semibold transition inline-flex items-center gap-2 shadow-sm">
           <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
             <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.119.098.152.228.166.322.016.108.035.334.02.514z"/>
           </svg>
           <span id="txt-contact">Связь</span>
         </a>
+
       </div>
 
       <h1 class="text-4xl md:text-5xl font-black text-amber-400 tracking-wider uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
@@ -121,9 +128,6 @@
 
   </div>
 
-  <!-- Виджет сообщений ВКонтакте -->
-  <div id="vk_community_messages"></div>
-
   <!-- Подвал сайта (Footer) без фона -->
   <footer class="mt-auto w-full py-4 px-5 text-center font-sans text-xs text-slate-400/80 leading-relaxed border-t border-slate-700/30">
     <p id="footer-info" class="m-0 mb-1">
@@ -141,20 +145,11 @@
   <script>
     const GOOGLE_SHEET_CSV_URL = '';
 
-    // Инициализация виджета VK Чат для группы 232470500 (clubmultiproff)
-    try {
-      VK.Widgets.CommunityMessages("vk_community_messages", 232470500, {
-        tooltipButtonText: "Есть вопросы?",
-        expandTimeout: 5000
-      });
-    } catch (e) {
-      console.log("VK Chat Init Error:", e);
-    }
-
     // Тексты для локализации UI
     const i18n = {
       ru: {
         contact: "Связь",
+        vk: "Мы Вконтакте",
         filterAll: "Все",
         titleUpcoming: "Скоро открытие",
         titleOpened: "Уже открылись",
@@ -168,6 +163,7 @@
       },
       en: {
         contact: "Contact",
+        vk: "VK Community",
         filterAll: "All",
         titleUpcoming: "Upcoming Releases",
         titleOpened: "Already Opened",
@@ -390,6 +386,7 @@
       const t = i18n[currentLang];
       
       document.getElementById('txt-contact').innerText = t.contact;
+      document.getElementById('txt-vk').innerText = t.vk;
       document.getElementById('filter-all').innerText = t.filterAll;
       document.getElementById('title-upcoming').innerText = t.titleUpcoming;
       document.getElementById('title-opened').innerText = t.titleOpened;
