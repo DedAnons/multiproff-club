@@ -1,241 +1,198 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multiproff Club — Анонсер серверов Lineage 2</title>
-  <style>
-    :root {
-      --bg-color: #0d0f12;
-      --panel-bg: #161920;
-      --accent-color: #ffaa00;
-      --text-color: #e0e0e0;
-      --text-muted: #8a8f99;
-      --border-color: #262b36;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
-    }
-
-    /* ШАПКА САЙТА */
-    .header {
-      background-color: var(--panel-bg);
-      border-bottom: 1px solid var(--border-color);
-      padding: 12px 24px;
-    }
-
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    /* Кнопка связи (слева) */
-    .contact-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background-color: rgba(255, 170, 0, 0.1);
-      color: var(--accent-color);
-      border: 1px solid var(--accent-color);
-      padding: 8px 16px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.2s ease;
-    }
-
-    .contact-btn:hover {
-      background-color: var(--accent-color);
-      color: #000;
-    }
-
-    /* Логотип / Название (по центру) */
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      color: #fff;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .logo span {
-      color: var(--accent-color);
-    }
-
-    /* Переключатель языка (справа) */
-    .lang-switcher {
-      display: flex;
-      gap: 4px;
-      background-color: var(--bg-color);
-      padding: 3px;
-      border-radius: 6px;
-      border: 1px solid var(--border-color);
-    }
-
-    .lang-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      padding: 5px 10px;
-      font-weight: bold;
-      font-size: 13px;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: all 0.2s ease;
-    }
-
-    .lang-btn.active, .lang-btn:hover {
-      background-color: var(--panel-bg);
-      color: var(--accent-color);
-    }
-
-    /* ОСНОВНОЙ КОНТЕНТ */
-    .main-container {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-
-    .server-list-title {
-      font-size: 22px;
-      margin-bottom: 20px;
-      color: #fff;
-      border-left: 4px solid var(--accent-color);
-      padding-left: 12px;
-    }
-
-    .server-table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: var(--panel-bg);
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-    }
-
-    .server-table th, .server-table td {
-      padding: 14px 18px;
-      text-align: left;
-    }
-
-    .server-table th {
-      background-color: rgba(0, 0, 0, 0.3);
-      color: var(--text-muted);
-      font-size: 13px;
-      text-transform: uppercase;
-    }
-
-    .server-table tr:not(:last-child) {
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .server-name {
-      font-weight: bold;
-      color: #fff;
-    }
-
-    .chronicle-badge {
-      background-color: var(--bg-color);
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    /* ФУТЕР */
-    .footer {
-      text-align: center;
-      padding: 25px;
-      margin-top: 50px;
-      border-top: 1px solid var(--border-color);
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiproff Club - Анонсы серверов Lineage 2</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            100: '#1e232d',
+                            200: '#14171d',
+                            300: '#0d0f12'
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0d0f12;
+            background-image: radial-gradient(circle at top, rgba(30, 35, 45, 0.5) 0%, rgba(13, 15, 18, 0.95) 100%), 
+                              url('https://cdna.artstation.com/p/assets/images/images/000/425/608/large/lineage2-bg.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center top;
+            color: #e2e8f0;
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col font-sans antialiased">
 
-  <!-- ШАПКА С ОБНОВЛЕННЫМ РАСПОЛОЖЕНИЕМ КНОПОК -->
-  <header class="header">
-    <div class="header-container">
-      
-      <!-- Кнопка связь (слева) -->
-      <a href="https://t.me/your_telegram" class="contact-btn" target="_blank" rel="noopener">
-        <span>✈</span> Связь
-      </a>
+    <!-- ШАПКА САЙТА -->
+    <header class="bg-dark-200/90 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- КНОПКА СВЯЗЬ (Слева) -->
+            <div class="flex items-center">
+                <a href="https://t.me/your_telegram" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gold-500/10 border border-gold-500/30 text-gold-400 hover:bg-gold-500/20 transition-all text-sm font-semibold">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.458c.538-.196 1.006.128.832.941z"/></svg>
+                    <span>Связь</span>
+                </a>
+            </div>
 
-      <!-- Логотип -->
-      <div class="logo">
-        Multiproff <span>Club</span>
-      </div>
+            <!-- ЛОГОТИП (По центру) -->
+            <div class="text-xl sm:text-2xl font-bold tracking-wider text-white uppercase">
+                Multiproff <span class="text-gold-500">Club</span>
+            </div>
 
-      <!-- Кнопка смены языка (вернулась на прежнее место справа) -->
-      <div class="lang-switcher">
-        <button class="lang-btn active" data-lang="ru">RU</button>
-        <button class="lang-btn" data-lang="en">EN</button>
-      </div>
+            <!-- ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА (Справа на своем прежнем месте) -->
+            <div class="flex items-center bg-dark-300 p-1 rounded-lg border border-gray-800">
+                <button id="lang-ru" onclick="setLanguage('ru')" class="px-2.5 py-1 text-xs font-bold rounded bg-dark-100 text-gold-400 transition-all">RU</button>
+                <button id="lang-en" onclick="setLanguage('en')" class="px-2.5 py-1 text-xs font-bold rounded text-gray-400 hover:text-white transition-all">EN</button>
+            </div>
 
-    </div>
-  </header>
+        </div>
+    </header>
 
-  <!-- ОСНОВНАЯ ЧАСТЬ -->
-  <main class="main-container">
-    <h2 class="server-list-title">Анонсы серверов Lineage 2 Multiproff</h2>
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- БЛОК ФИЛЬТРОВ -->
+        <div class="bg-dark-200/80 backdrop-blur rounded-xl p-4 mb-6 border border-gray-800/80 flex flex-wrap gap-2 items-center justify-between">
+            <div class="flex flex-wrap gap-2">
+                <button onclick="filterServers('all')" class="filter-btn active px-3 py-1.5 rounded-lg bg-gold-500 text-dark-300 font-bold text-sm transition-all">Все</button>
+                <button onclick="filterServers('interlude')" class="filter-btn px-3 py-1.5 rounded-lg bg-dark-100 text-gray-300 hover:text-gold-400 font-medium text-sm transition-all">Interlude</button>
+                <button onclick="filterServers('high-five')" class="filter-btn px-3 py-1.5 rounded-lg bg-dark-100 text-gray-300 hover:text-gold-400 font-medium text-sm transition-all">High Five</button>
+                <button onclick="filterServers('essence')" class="filter-btn px-3 py-1.5 rounded-lg bg-dark-100 text-gray-300 hover:text-gold-400 font-medium text-sm transition-all">Essence</button>
+            </div>
+            <div class="text-xs text-gray-400" id="server-count">
+                Показано серверов: 0
+            </div>
+        </div>
 
-    <table class="server-table">
-      <thead>
-        <tr>
-          <th>Открытие</th>
-          <th>Название сервера</th>
-          <th>Хроники</th>
-          <th>Рейты</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Скоро</td>
-          <td class="server-name">Multiproff Custom x100</td>
-          <td><span class="chronicle-badge">High Five</span></td>
-          <td>x100</td>
-        </tr>
-        <tr>
-          <td>В процессе</td>
-          <td class="server-name">Multiskill World x10</td>
-          <td><span class="chronicle-badge">Interlude</span></td>
-          <td>x10</td>
-        </tr>
-      </tbody>
-    </table>
-  </main>
+        <!-- СПИСОК СЕРВЕРОВ -->
+        <div class="bg-dark-200/80 backdrop-blur rounded-xl border border-gray-800/80 overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-dark-300/80 text-gray-400 text-xs uppercase tracking-wider border-b border-gray-800">
+                            <th class="p-4">Дата</th>
+                            <th class="p-4">Название</th>
+                            <th class="p-4">Хроники</th>
+                            <th class="p-4">Рейты</th>
+                            <th class="p-4 text-right">Инфо</th>
+                        </tr>
+                    </thead>
+                    <tbody id="server-list-body" class="divide-y divide-gray-800/60">
+                        <!-- Сервера рендерятся через JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-  <footer class="footer">
-    &copy; 2026 Multiproff Club. Все права защищены.
-  </footer>
+    </main>
 
-  <script>
-    // Простой скрипт переключения активности языковых кнопок
-    const langButtons = document.querySelectorAll('.lang-btn');
-    langButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        langButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      });
-    });
-  </script>
+    <!-- ФУТЕР -->
+    <footer class="bg-dark-300/90 border-t border-gray-800 py-6 mt-12 text-center text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>&copy; 2026 Multiproff Club. Все права защищены. Lineage 2 является зарегистрированной торговой маркой NCSOFT.</p>
+        </div>
+    </footer>
 
+    <!-- СКРИПТЫ С ДАННЫМИ И ЛОГИКОЙ -->
+    <script>
+        const defaultServers = [
+            { id: 1, date: 'Сегодня', name: 'Multiproff Custom', chronicle: 'high-five', type: 'High Five', rates: 'x100', vip: true, desc: 'Уникальный сервер с мультипроф механикой, кастомными скиллами и балансом.' },
+            { id: 2, date: '25 Авг', name: 'Multiskill Classic', chronicle: 'interlude', type: 'Interlude', rates: 'x10', vip: true, desc: 'Классический мультискрипт с пошаговой прокачкой и дополнениями.' },
+            { id: 3, date: '01 Сен', name: 'Essence Multiproff', chronicle: 'essence', type: 'Essence', rates: 'x1000', vip: false, desc: 'Быстрый старт, автобой, уникальные древа умений.' }
+        ];
+
+        let currentLang = 'ru';
+        let currentFilter = 'all';
+
+        function renderServers() {
+            const tbody = document.getElementById('server-list-body');
+            tbody.innerHTML = '';
+
+            const filtered = defaultServers.filter(s => currentFilter === 'all' || s.chronicle === currentFilter);
+            document.getElementById('server-count').innerText = `Показано серверов: ${filtered.length}`;
+
+            filtered.forEach(server => {
+                const tr = document.createElement('tr');
+                tr.className = `hover:bg-dark-100/50 transition-colors ${server.vip ? 'bg-gold-500/5' : ''}`;
+                tr.innerHTML = `
+                    <td class="p-4 font-semibold text-sm ${server.vip ? 'text-gold-400' : 'text-gray-300'}">${server.date}</td>
+                    <td class="p-4 font-bold text-white flex items-center gap-2">
+                        ${server.name}
+                        ${server.vip ? '<span class="bg-gold-500/20 text-gold-400 border border-gold-500/40 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase">VIP</span>' : ''}
+                    </td>
+                    <td class="p-4"><span class="bg-dark-300 text-gray-300 border border-gray-700 text-xs px-2 py-1 rounded">${server.type}</span></td>
+                    <td class="p-4 text-sm font-medium text-gray-300">${server.rates}</td>
+                    <td class="p-4 text-right">
+                        <button onclick="toggleDetails(${server.id})" class="text-xs text-gray-400 hover:text-gold-400 underline transition-colors">Подробнее</button>
+                    </td>
+                `;
+
+                const detailTr = document.createElement('tr');
+                detailTr.id = `detail-${server.id}`;
+                detailTr.className = 'hidden bg-dark-300/40 border-b border-gray-800';
+                detailTr.innerHTML = `
+                    <td colspan="5" class="p-4 text-sm text-gray-400 bg-dark-300/20">
+                        <div class="p-2 border-l-2 border-gold-500">
+                            ${server.desc}
+                        </div>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+                tbody.appendChild(detailTr);
+            });
+        }
+
+        function filterServers(category) {
+            currentFilter = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-gold-500', 'text-dark-300');
+                btn.classList.add('bg-dark-100', 'text-gray-300');
+            });
+            event.target.classList.add('active', 'bg-gold-500', 'text-dark-300');
+            event.target.classList.remove('bg-dark-100', 'text-gray-300');
+            renderServers();
+        }
+
+        function toggleDetails(id) {
+            const row = document.getElementById(`detail-${id}`);
+            row.classList.toggle('hidden');
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const ruBtn = document.getElementById('lang-ru');
+            const enBtn = document.getElementById('lang-en');
+
+            if (lang === 'ru') {
+                ruBtn.className = 'px-2.5 py-1 text-xs font-bold rounded bg-dark-100 text-gold-400 transition-all';
+                enBtn.className = 'px-2.5 py-1 text-xs font-bold rounded text-gray-400 hover:text-white transition-all';
+            } else {
+                enBtn.className = 'px-2.5 py-1 text-xs font-bold rounded bg-dark-100 text-gold-400 transition-all';
+                ruBtn.className = 'px-2.5 py-1 text-xs font-bold rounded text-gray-400 hover:text-white transition-all';
+            }
+        }
+
+        // Первоначальный рендер
+        renderServers();
+    </script>
 </body>
 </html>
