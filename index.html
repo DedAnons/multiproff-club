@@ -3,243 +3,689 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Каталог сайтов</title>
+  <title>Multiproff Club</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P4WJ24PLF0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-P4WJ24PLF0');
+  </script>
+  
+  <!-- Иконка сайта (Favicon) -->
+  <link rel="icon" type="image/x-icon" href="https://wsrv.nl/?url=i.ibb.co/Dg7cJsDc/image.png&output=ico">
+  <link rel="apple-touch-icon" href="https://wsrv.nl/?url=i.ibb.co/Dg7cJsDc/image.png&output=png">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- PapaParse для чтения Google Таблиц -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, sans-serif;
+    /* Принудительный скроллбар навсегда убирает дёргание сайта */
+    html {
+      overflow-y: scroll;
     }
 
+    /* Фоновое изображение (HD арт) */
     body {
-      background-color: #121214;
-      color: #e1e1e6;
-      padding: 40px 20px;
+      background-color: #0b0f19;
+      color: #e2e8f0;
+      background-image: 
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.40), rgba(11, 15, 25, 0.65)),
+        url('https://cdna.artstation.com/p/assets/images/images/013/794/960/large/ekaterina-chesalova-l2-contest-res.jpg?1541113219');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+    
+    /* Эффект матового стекла для карточек (Glassmorphism) */
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(10px);
     }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
+    /* Эффект свечения VIP карточки */
+    .vip-card {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(15, 23, 42, 0.90) 100%);
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+      backdrop-filter: blur(12px);
     }
 
-    h1 {
-      margin-bottom: 24px;
-      font-size: 28px;
+    /* Плавный аккордеон */
+    .accordion-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.3s ease-out;
     }
-
-    /* Список плашек */
-    .site-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    /* Плашка сайта — кликабельна вся целиком */
-    .site-card {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px 20px;
-      background-color: #202024;
-      border: 1px solid #29292e;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.2s, transform 0.1s, border-color 0.2s;
-    }
-
-    .site-card:hover {
-      background-color: #29292e;
-      border-color: #00875f;
-      transform: translateY(-2px);
-    }
-
-    .site-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 8px;
-      background-color: #121214;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: #00b37e;
-    }
-
-    .site-info {
-      flex: 1;
-    }
-
-    .site-title {
-      font-size: 18px;
-      margin-bottom: 4px;
-      color: #ffffff;
-    }
-
-    .site-desc {
-      font-size: 14px;
-      color: #a8a8b3;
-    }
-
-    /* Затемнение фона при открытии шторки */
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-      z-index: 900;
-    }
-
-    .overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* Выезжающая шторка справа */
-    .drawer {
-      position: fixed;
-      top: 0;
-      right: -420px;
-      width: 400px;
-      max-width: 100%;
-      height: 100%;
-      background-color: #202024;
-      border-left: 1px solid #29292e;
-      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
-      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .drawer.active {
-      right: 0;
-    }
-
-    .drawer-header {
-      padding: 24px;
-      border-bottom: 1px solid #29292e;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .drawer-title {
-      font-size: 20px;
-      color: #ffffff;
-    }
-
-    .close-btn {
-      background: none;
-      border: none;
-      color: #a8a8b3;
-      font-size: 24px;
-      cursor: pointer;
-      padding: 4px 8px;
-      line-height: 1;
-    }
-
-    .close-btn:hover {
-      color: #ffffff;
-    }
-
-    .drawer-content {
-      padding: 24px;
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .drawer-content p {
-      line-height: 1.6;
-      color: #c4c4cc;
-      margin-bottom: 20px;
-    }
-
-    .visit-btn {
-      display: inline-block;
-      padding: 12px 20px;
-      background-color: #00875f;
-      color: #ffffff;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      transition: background-color 0.2s;
-    }
-
-    .visit-btn:hover {
-      background-color: #00b37e;
-    }
+    .accordion-content.open { grid-template-rows: 1fr; }
+    .accordion-inner { overflow: hidden; }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-8 pb-0 md:pb-0">
 
-  <div class="container">
-    <h1>Список сайтов</h1>
-
-    <div class="site-list">
-
-      <!-- Плашка 1 (вся кликабельна) -->
-      <div class="site-card" onclick="openDrawer('Multiproff Club', 'Информационный портал и анонсы серверов Lineage 2 с мультипрофессией.', 'https://example.com')">
-        <div class="site-icon">MC</div>
-        <div class="site-info">
-          <div class="site-title">Multiproff Club</div>
-          <div class="site-desc">Портал серверов Lineage 2</div>
+  <div class="max-w-7xl mx-auto w-full mb-8">
+    
+    <!-- Шапка с кнопками переключения языка и связи -->
+    <header class="relative text-center mb-8 border-b border-slate-700/50 pb-6 flex flex-col items-center justify-center">
+      
+      <!-- Панель управления справа (Переключатель языков + Telegram) -->
+      <div class="md:absolute md:right-0 md:top-2 mb-4 md:mb-0 flex items-center gap-3">
+        
+        <!-- Переключатель языка -->
+        <div class="glass-panel p-1 rounded-lg border border-slate-700/60 flex items-center gap-1 text-xs font-bold">
+          <button id="btn-lang-ru" onclick="setLanguage('ru')" class="px-2.5 py-1 rounded transition">RU</button>
+          <button id="btn-lang-en" onclick="setLanguage('en')" class="px-2.5 py-1 rounded transition">EN</button>
         </div>
+
+        <!-- Кнопка Telegram (Связь) -->
+        <a href="https://t.me/Misterpandatipa" target="_blank" class="glass-panel hover:bg-sky-500/20 text-sky-400 border border-sky-500/40 hover:border-sky-400 px-3.5 py-1.5 rounded-lg text-sm font-semibold transition inline-flex items-center gap-2 shadow-sm">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.119.098.152.228.166.322.016.108.035.334.02.514z"/>
+          </svg>
+          <span id="txt-contact">Связь</span>
+        </a>
       </div>
 
-      <!-- Плашка 2 (вся кликабельна) -->
-      <div class="site-card" onclick="openDrawer('Пример Сайта 2', 'Подробное описание второго сайта с дополнительными деталями и характеристиками.', 'https://example.com')">
-        <div class="site-icon">S2</div>
-        <div class="site-info">
-          <div class="site-title">Пример Сайта 2</div>
-          <div class="site-desc">Краткая плашка с описанием</div>
-        </div>
+      <h1 class="text-4xl md:text-5xl font-black text-amber-400 tracking-wider uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+        Multiproff Club
+      </h1>
+    </header>
+
+    <!-- VIP Блок -->
+    <div id="vip-container" class="mb-6"></div>
+
+    <!-- Фильтры Хроник -->
+    <div class="flex flex-wrap gap-2 justify-center mb-6">
+      <button onclick="filterChronicle('ALL')" class="glass-panel hover:bg-slate-700/80 text-slate-200 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50" id="filter-all">Все</button>
+      <button onclick="filterChronicle('Interlude')" class="glass-panel hover:bg-slate-700/80 text-amber-400 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50">Interlude</button>
+      <button onclick="filterChronicle('High Five')" class="glass-panel hover:bg-slate-700/80 text-amber-400 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50">High Five</button>
+      <button onclick="filterChronicle('Classic')" class="glass-panel hover:bg-slate-700/80 text-amber-400 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50">Classic</button>
+      <button onclick="filterChronicle('Essence')" class="glass-panel hover:bg-slate-700/80 text-amber-400 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50">Essence</button>
+      <button onclick="filterChronicle('Main')" class="glass-panel hover:bg-slate-700/80 text-amber-400 px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-slate-700/50">Main</button>
+    </div>
+
+    <!-- Две колонки с серверами -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Скоро открытие -->
+      <div>
+        <h2 class="text-lg font-bold text-emerald-400 mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span id="title-upcoming">Скоро открытие</span>
+        </h2>
+        <div id="upcoming-list" class="space-y-3"></div>
+      </div>
+
+      <!-- Уже открылись -->
+      <div>
+        <h2 class="text-lg font-bold text-amber-400 mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span id="title-opened">Уже открылись</span>
+        </h2>
+        <div id="opened-list" class="space-y-3"></div>
       </div>
 
     </div>
+
   </div>
 
-  <!-- Фон-затемнение -->
-  <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
-
-  <!-- Шторка -->
-  <div class="drawer" id="drawer">
-    <div class="drawer-header">
-      <h2 class="drawer-title" id="drawerTitle">Название сайта</h2>
-      <button class="close-btn" onclick="closeDrawer()">&times;</button>
-    </div>
-    <div class="drawer-content">
-      <p id="drawerDesc">Полное описание появится здесь при клике на плашку.</p>
-      <a href="#" id="drawerLink" target="_blank" class="visit-btn">Перейти на сайт</a>
-    </div>
-  </div>
+  <!-- Подвал сайта (Footer) -->
+  <footer class="mt-auto w-full py-4 px-5 text-center font-sans text-xs text-slate-400/80 leading-relaxed border-t border-slate-700/30">
+    <p id="footer-info" class="m-0 mb-1">
+      Сведения, размещенные на сайте, носят исключительно информационно-ознакомительный характер.
+    </p>
+    <p class="m-0 mb-1">
+      Lineage II is a registered trademark of NCSoft Corporation.
+    </p>
+    <p class="m-0 text-slate-500">
+      Background Art by <a href="https://www.artstation.com/philiera" target="_blank" rel="noopener noreferrer" class="text-amber-400/80 hover:text-amber-400 underline transition">Ekaterina Chesalova (Philiera)</a>
+    </p>
+  </footer>
 
   <script>
-    function openDrawer(title, description, link) {
-      document.getElementById('drawerTitle').innerText = title;
-      document.getElementById('drawerDesc').innerText = description;
-      document.getElementById('drawerLink').href = link;
+    const GOOGLE_SHEET_CSV_URL = '';
 
-      document.getElementById('drawer').classList.add('active');
-      document.getElementById('overlay').classList.add('active');
-    }
-
-    function closeDrawer() {
-      document.getElementById('drawer').classList.remove('active');
-      document.getElementById('overlay').classList.remove('active');
-    }
-
-    // Закрытие шторки по клавише Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeDrawer();
+    const i18n = {
+      ru: {
+        contact: "Связь",
+        filterAll: "Все",
+        titleUpcoming: "Скоро открытие",
+        titleOpened: "Уже открылись",
+        vipTitle: "МЕСТО ДЛЯ VIP РЕКЛАМЫ",
+        vipDesc: "Закрепите ваш сервер на самом видном месте анонсера",
+        visitWebsite: "Перейти на сайт",
+        footerInfo: "Сведения, размещенные на сайте, носят исключительно информационно-ознакомительный характер.",
+        statusOnline: "Онлайн / Открыт",
+        statusUpcoming: "Скоро открытие"
+      },
+      en: {
+        contact: "Contact",
+        filterAll: "All",
+        titleUpcoming: "Upcoming Releases",
+        titleOpened: "Already Opened",
+        vipTitle: "VIP ADVERTISEMENT PLACE",
+        vipDesc: "Pin your server at the top of the announcer list",
+        visitWebsite: "Visit Website",
+        footerInfo: "The information provided on this site is for informational purposes only.",
+        statusOnline: "Online / Opened",
+        statusUpcoming: "Upcoming release"
       }
-    });
+    };
+
+    let currentLang = localStorage.getItem('multiproff_lang') || 'ru';
+
+    const monthNames = {
+      ru: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+      en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    };
+
+    let defaultServers = [
+      {
+        id: 19,
+        name: "MultiReborn",
+        chronicle: "High Five",
+        rates: "x10",
+        date: "25 Сен 2026",
+        isVip: false,
+        url: "https://multireborn.club/",
+        features: {
+          ru: ["Мультипрофа", "Перерождения", "Дополнения", "Автофарм", "Офлайн фарм"],
+          en: ["Multiproff", "Rebirths", "Custom Content", "Autofarm", "Offline Farming"]
+        },
+        desc: {
+          ru: "High Five x10 с мультипрофессией и перерождениями. На сервере доступны автофарм и офлайн-фарм, а также офлайн продажа бафа (длительность баффов 8 часов). Большое количество дополнений: 11 новых видов оружия, 8 уровней брони, 7 уровней бижутерии, 15 видов кукол и 7 новых земель. Существенно переработан баланс скиллов.",
+          en: "High Five x10 with multiproff and rebirth system. Features autofarm, offline farming, and offline buff sales (buffs last 8 hours). Extensive custom content: 11 new weapon types, 8 armor tiers, 7 accessory tiers, 15 doll types, and 7 new zones. Extensive skill rebalance."
+        }
+      },
+      {
+        id: 18,
+        name: "L2Skill",
+        chronicle: "High Five",
+        rates: "x10",
+        date: "18 Сен 2026",
+        isVip: false,
+        url: "https://l2skill.com/",
+        features: {
+          ru: ["Мультипрофа", "Перерождения", "Дополнения", "Автоохота"],
+          en: ["Multiproff", "Rebirths", "Custom Content", "Auto-hunting"]
+        },
+        desc: {
+          ru: "High Five x10 с мультипрофой, системами нулов, апов и автоохотой. Баффы на 2 часа с опцией ребаффа (импульсы от 15 сек до 45 сек при заточке). Мультиатака для физических классов, разделение характеристик на физ/маг без привязки к расе. Все инстансы адаптированы под соло прохождение. Штраф на грейд отсутствует, разница на кач с мобов — 20 уровней, а также до 61 лвла доступно Тренировочное дерево в Гиране для пассивной прокачки.",
+          en: "High Five x10 multiproff server featuring rebirths, gear upgrades, and auto-hunting. Buffs last 2 hours with rebuffing functions (impulses 15s to 45s when enchanted). Multi-attack for physical classes, stats split into phys/mag without race reliance. Solo instances, no grade penalties, 20-level mob exp threshold, and a Training Tree in Giran for passive exping up to level 61."
+        }
+      },
+      {
+        id: 17,
+        name: "Desperion",
+        chronicle: "High Five",
+        rates: "x5",
+        date: "12 Сен 2026",
+        isVip: false,
+        url: "https://desperion.world/",
+        features: {
+          ru: ["Мультипрофа", "Перерождения", "GvE", "Дополнения", "Автофарм", "Оффлайн фарм"],
+          en: ["Multiproff", "Rebirths", "GvE", "Custom Content", "Autofarm", "Offline Farming"]
+        },
+        desc: {
+          ru: "High Five x5 с глубокой мультипрофой и новыми классами (Death Knight, Shine Maker, Warg). Уникальная механика перерождений, автоохота/оффлайн-фарм до 24 часов, управляемый PvP-режим и противостояние фракций GvE (Аден против Годдарда). Новая Олимпиада с уникальными бонусами, Арена (FFA, 1x1, 2x2, 3x3) с реликвиями, 5 типов чемпионов, новая система развития статов и прогрессия экипировки.",
+          en: "High Five x5 featuring custom multiproff mechanics and new classes (Death Knight, Shine Maker, Warg). Unique rebirth system, up to 24h auto/offline farming, controlled global PvP mode, and GvE faction war (Aden vs Goddard). Reimagined Olympiad, Arenas (FFA, 1v1, 2v2, 3v3) with relics, 5 champion tiers, new stat progression, and custom gear sets."
+        }
+      },
+      {
+        id: 16,
+        name: "AstralWorld",
+        chronicle: "Main",
+        rates: "x10",
+        date: "25 Сен 2026",
+        isVip: false,
+        url: "https://astralworld.net/",
+        features: {
+          ru: ["Мультипрофа", "Дополнения", "Нулы", "Апы", "Автофарм", "Оффлайнфарм"],
+          en: ["Multiproff", "Custom Content", "Rebirths", "Upgrades", "Autofarm", "Offline Farming"]
+        },
+        desc: {
+          ru: "Main x10 с оригинальной системой штрафов на изучение умений: после 5/10/15/20 скиллов накладывается ограничение, снимаемое выполнением требований зон и предметов. Новый класс Сильф и оружие (пистолеты), автофарм/оффлайнфарм, система нулов/апов, продажа баффов, быстрая перезарядка мобов (5 сек), авторские локации, инстансы, сессионные зоны, брошки, коллекции и талисманы.",
+          en: "Main x10 featuring a unique skill-learning penalty mechanics: learning caps apply after 5/10/15/20 skills and require specific zone or item objectives to unlock. Features the Sylph class with Pistols, autofarm/offline farming, rebirths & upgrades, buff sales, 5-second mob respawns, custom zones, instances, session zones, brooches, collections, and talismans."
+        }
+      },
+      {
+        id: 15,
+        name: "L2Cor",
+        chronicle: "High Five",
+        rates: "x2",
+        date: "13 Сен 2026",
+        isVip: false,
+        url: "https://www.l2cor.com/",
+        features: {
+          ru: ["Мультипрофа", "Пассивный баф", "Автофарм", "Оффлайнфарм", "Апы", "Нулы"],
+          en: ["Multiproff", "Passive Buffs", "Autofarm", "Offline Farming", "Upgrades", "Rebirths"]
+        },
+        desc: {
+          ru: "High Five x2 с концепцией мультипрофессии. Почти все эффекты, лимиты, аппетиты и ауры переведены в пассивные умения. Абсолютно бесплатный автофарм и оффлайн-кач. Вход в инстансы от 1 до 2 персонажей (1+1) в зависимости от сложности. Реализована безопасная заточка (лимит заточки зависит от тира экипировки), а также системы нулов и апов.",
+          en: "High Five x2 multiproff server. Almost all buffs, limits, appetites, and auras converted into passive skills. Completely free autofarm and offline leveling. Instance entries reduced to 1 or 2 players (1+1) depending on difficulty. Safe enchanting system (enchant caps depend on gear tier), rebirths, and gear upgrades."
+        }
+      },
+      {
+        id: 14,
+        name: "Asteria",
+        chronicle: "High Five",
+        rates: "x1",
+        date: "30 Сен 2026",
+        isVip: false,
+        url: "https://l2asteria.fun/",
+        features: {
+          ru: ["Скиллы за монеты", "Автофарм", "Офлайн фарм", "Извлечение умений с экипировки"],
+          en: ["Coins for Skills", "Autofarm", "Offline Farming", "Extract Gear Skills"]
+        },
+        desc: {
+          ru: "High Five x1 с концепцией мультипрофессии. Изучение умений происходит за специальные монетки, которые можно получить за выполнение заданий, участие в ивентах и убийство боссов. Длительность баффов составляет 20 часов, а денсы и сонги переведены в пассивные умения. Доступен встроенный автофарм и офлайн-кач, а также уникальная механика извлечения и изучения пассивных бонусов от сетов брони.",
+          en: "High Five x1 multiproff server. Skills are learned using special coins obtained from quests, events, and bosses. Buff duration is 20 hours, with dances and songs converted into passive skills. Features built-in autofarm, offline leveling, and a unique mechanic for extracting and learning passive bonuses from armor sets."
+        }
+      },
+      {
+        id: 13,
+        name: "Phoenix L2",
+        chronicle: "High Five",
+        rates: "x1",
+        date: "28 Авг 2026",
+        isVip: false,
+        url: "https://phoenixl2.ru/",
+        features: {
+          ru: ["Мультипрофа", "Скиллы за монеты", "Автофарм", "Перерождения"],
+          en: ["Multiproff", "Coins for Skills", "Autofarm", "Rebirths"]
+        },
+        desc: {
+          ru: "High Five x1 с мультипрофой. При создании персонажа и прокачке 1-3 профессий даётся 60 Эссенций Перерождения для изучения базовых скиллов. Далее умения покупаются за монеты с нулов. Бесплатный автофарм (5 ч/день, с ПА — без лимитов). Баффы на 12 часов, денсы/сонг/ауры переведены в пассивки, а комбо-баффы стали селфами на 85 уровне. Доступна мультиатака с 20 лвла, авторские инстансы, переработанные локации и серверный босс Хаос.",
+          en: "High Five x1 multiproff server. Starting character and 1st-3rd class transfers grant 60 Rebirth Essences for initial skills, with further skills bought via rebirth coins. Free autofarm (5 hrs/day, unlimited with PA). 12-hour buffs, dances/songs/auras converted to passives, combo buffs turned into 85 lvl self-buffs. Includes auto-multiattack at lvl 20, custom instances, rebalanced zones, and World Boss Chaos."
+        }
+      },
+      {
+        id: 12,
+        name: "L2Tauti World",
+        chronicle: "High Five",
+        rates: "x3",
+        date: "11 Сен 2026",
+        isVip: false,
+        url: "https://l2tauti-world.com/",
+        features: {
+          ru: ["Мультипрофа", "Нулы", "Апы", "Автоохота", "Стадии"],
+          en: ["Multiproff", "Rebirths", "Upgrades", "Auto-hunting", "Stages"]
+        },
+        desc: {
+          ru: "High Five x3 с полноценной мультипрофессией и поэтапными стадиями для поддержания игрового баланса. В наличии нулы и апы (броня, оружие, эпик бижутерия), а также встроенная автоохота. Переработаны и усилены ключевые навыки: многие физ. баффы дают маг. атаку, а Over the Body, CoV и бафф Зачарователя свободно стакаются.",
+          en: "High Five x3 with full multiproff mechanics and phased stage progression for balanced play. Features rebirths, gear/epic upgrades, and built-in auto-hunting. Key skills updated: many physical buffs now boost M.Atk, while Over the Body, CoV, and Enchanter buffs fully stack."
+        }
+      },
+      {
+        id: 11,
+        name: "L2Multi",
+        chronicle: "Main",
+        rates: "x12",
+        date: "18 Сен 2026",
+        isVip: false,
+        url: "https://l2multi.club/",
+        features: {
+          ru: ["Мультипрофа", "Дополнения", "Автофарм", "Офлайн фарм"],
+          en: ["Multiproff", "Custom Content", "Autofarm", "Offline Farming"]
+        },
+        desc: {
+          ru: "Масштабный старт на Main хрониках от легендарного и давно зарекомендовавшего себя проекта! Полноценная мультипрофессия, встроенный автофарм и офлайн-кач. Огромное количество уникального контента, инстансов, глубоких переработок и авторских дополнений для долгой и насыщенной игры.",
+          en: "Grand launch on Main chronicles from a long-running, well-established project! Full multiproff mechanics, built-in autofarm and offline leveling. Packed with custom content, instances, and unique additions designed for long-term gameplay."
+        }
+      },
+      {
+        id: 10,
+        name: "Multiland",
+        chronicle: "Essence",
+        rates: "x10",
+        date: "12 Июн 2026",
+        isVip: false,
+        url: "https://multiland.ws/",
+        features: {
+          ru: ["Мультипрофа", "Перерождения", "Крафт", "Дополнения"],
+          en: ["Multiproff", "Rebirths", "Crafting", "Custom Content"]
+        },
+        desc: {
+          ru: "Essence 418 pr х10 с полноценной мультипрофессией (изучение скиллов через Alt+B) и системой поэтапных перерождений. Возвращён классический крафт топ-вещей, добавлено 100+ новых РБ с автолутом, гибкое усиление чемпионов, переработанный баланс скиллов и улучшенная авто-охота. Ограничение 2 окна для честного PvP.",
+          en: "Essence 418 pr x10 with full multiproff mechanics (learn skills via Alt+B) and phased rebirth system. Classic top-gear crafting is back, 100+ new raid bosses with autoloot, dynamic champion scaling, adapted skills, and enhanced auto-hunting. 2-box limit for fair PvP."
+        }
+      },
+      {
+        id: 9,
+        name: "Risen Worlds",
+        chronicle: "Main",
+        rates: "Multiprof",
+        date: "28 Авг 2026",
+        isVip: false,
+        url: "https://risen-worlds.net/",
+        features: {
+          ru: ["Изучения умений экипировки", "Перерождения", "Сервер со стадиями"],
+          en: ["Equipment Skills Study", "Rebirths", "Staged Server"]
+        },
+        desc: {
+          ru: "Shield Of Kingdom на новом клиенте с глубокой оптимизацией интерфейса. Концепт изучения бонусов экипировки и эпика в пассивки. 8 глав развитие от C4 до GOD со сменой стадий в live-режиме (без рестартов). Гибкая система нулов с рандомными требованиями, оповещения и телепорты к эпик боссам с наградами за урон. Главное удобство: ресурсы и рецепты подтягиваются напрямую из доп. сумок!",
+          en: "Shield Of Kingdom on a new client with deep UI optimization. Learn equipment and epic boss bonuses into passive skills. 8 stages from C4 to GOD with live stage changes (no restarts). Flexible rebirth system with dynamic requirements, epic boss notifications and teleporting with damage rewards. Main QoL: resources & recipes auto-pull directly from extra bags!"
+        }
+      },
+      {
+        id: 8,
+        name: "Arcaide",
+        chronicle: "Interlude",
+        rates: "x10",
+        date: "14 Авг 2026",
+        isVip: false,
+        url: "https://arcaide.fun/",
+        features: {
+          ru: ["Стаксаб 1+3", "Дополнения", "Перерождения"],
+          en: ["Stacksub 1+3", "Custom Content", "Rebirths"]
+        },
+        desc: {
+          ru: "Interlude x10 со стаксабом (1+3). Крылья, тату и большое количество новой экипировки, брони и оружия. Механика нулов: переродись и получи Rebirth Coin для апгрейдов и изучения дополнительных умений. GM-Shop до S Grade со всеми расходниками и бафер с баффами на 1 час.",
+          en: "Interlude x10 with stacksub (1+3). Wings, tattoos, custom armor, and weapons. Rebirth mechanics: gain Rebirth Coins for upgrades and auxiliary skills. S-Grade GM Shop with all consumables and 1-hour buffers."
+        }
+      },
+      {
+        id: 7,
+        name: "ColdWar",
+        chronicle: "High Five",
+        rates: "x75",
+        date: "14 Авг 2026",
+        isVip: false,
+        url: "https://coldwar24.ru/",
+        features: {
+          ru: ["Стаксаб 1+5", "Без штрафа на грейд", "Автофарм / Нулы", "Крафт Дополнений", "ПА х2-х5"],
+          en: ["Stacksub 1+5", "No Grade Penalty", "Autofarm / Rebirths", "Custom Craft", "PA x2-x5"]
+        },
+        desc: {
+          ru: "High Five x75 со стаксабом (1+5, макс уровень 85). Автоизучение скиллов 1-80. Нет штрафа на грейд шмота, но есть штраф на мобов (9 уровней). Доступны автофарм, нулы, апы и многоуровневый крафт дополнений (1-10 уровень).",
+          en: "High Five x75 with stacksub (1+5, max lvl 85). Auto-learn skills 1-80. No item grade penalty. Features autofarm, rebirths, and 10-tier custom gear crafting."
+        }
+      },
+      {
+        id: 6,
+        name: "Multi-Classic",
+        chronicle: "Classic",
+        rates: "x10",
+        date: "21 Авг 2026",
+        isVip: false,
+        url: "https://multi-classic.top/",
+        features: {
+          ru: ["Нулы и Апы", "Апонулы", "Скиллы за Нулы", "Брошки и Камни", "Классический цикл"],
+          en: ["Rebirths & Upgrades", "Apo-Rebirths", "Rebirth Skills", "Brooches & Jewels", "Classic Cycle"]
+        },
+        desc: {
+          ru: "Проверенная временем концепция мультипрофы на Classic x10! Полный спектр развития: нулы, апы, апонулы. Новые скиллы (Аппетит и др.) за монетки с нулов. Брошки, драгоценные камни и глубокая прокачка.",
+          en: "Time-tested multiproff concept on Classic x10! Full progression loop: rebirths, upgrades, apo-rebirths. Custom skills bought via rebirth tokens. Brooches, jewels, and deep character development."
+        }
+      },
+      {
+        id: 5,
+        name: "RoseMulti",
+        chronicle: "Essence",
+        rates: "x1",
+        date: "21 Авг 2026",
+        isVip: false,
+        url: "https://rosemulti.ru/",
+        features: {
+          ru: ["Перерождения", "Пассивные баффы", "Оффлайн фарм", "TG Бот", "Увеличенный спавн мобов"],
+          en: ["Rebirths", "Passive Buffs", "Offline Farming", "Telegram Bot", "Increased Mob Spawn"]
+        },
+        desc: {
+          ru: "Новые хроники RoseVain с уникальным классом на Essence! Скиллы за перерождения, удобный оффлайн фарм с TG ботом. Положительные баффы переведены в пассивки. Увеличенное количество мобов на локациях и быстрый респ!",
+          en: "New RoseVain chronicle with a unique class on Essence! Skills unlocked via rebirths, offline farming integrated with Telegram Bot. Buffs converted into passives. Fast mob spawns!"
+        }
+      },
+      {
+        id: 4,
+        name: "Multi.ws",
+        chronicle: "Interlude",
+        rates: "x2",
+        date: "28 Авг 2026",
+        isVip: false,
+        url: "https://multi.ws/",
+        features: {
+          ru: ["Мультипрофа", "Разрешен бот", "Автофарм", "Клан скиллы", "Костюмы", "Бесконечные соски"],
+          en: ["Multiproff", "Bot Allowed", "Autofarm", "Clan Skills", "Costumes", "Infinite Shots"]
+        },
+        desc: {
+          ru: "Интерлюд х2 с мультипрофой. Разрешен бот и привычный автофарм. Основные баффы перенесены в клан-скиллы, добавлены костюмы со статами, апы и нулы. При наличии ПА соски и стрелы бесконечные.",
+          en: "Interlude x2 multiproff. Legal botting & autofarm. Essential buffs placed into clan skills. Custom stat costumes, rebirths, and unlimited shots/arrows with Premium Account."
+        }
+      }
+    ];
+
+    let servers = [];
+    let currentChronicleFilter = 'ALL';
+
+    function parseServerDate(dateStr) {
+      if (!dateStr) return new Date(0);
+      const allMonths = {
+        'Янв': 0, 'Фев': 1, 'Мар': 2, 'Апр': 3, 'Май': 4, 'Июн': 5,
+        'Июл': 6, 'Авг': 7, 'Сен': 8, 'Окт': 9, 'Ноя': 10, 'Дек': 11,
+        'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+        'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+      };
+      
+      const parts = dateStr.trim().split(' ');
+      const day = parseInt(parts[0]) || 1;
+      const month = allMonths[parts[1]] !== undefined ? allMonths[parts[1]] : 0;
+      const year = parseInt(parts[2]) || 2026;
+      
+      return new Date(year, month, day);
+    }
+
+    function formatDateForLang(dateStr, lang) {
+      const dateObj = parseServerDate(dateStr);
+      const day = dateObj.getDate();
+      const month = monthNames[lang][dateObj.getMonth()];
+      const year = dateObj.getFullYear();
+      return `${day} ${month} ${year}`;
+    }
+
+    function isServerOpened(dateStr) {
+      const serverDate = parseServerDate(dateStr);
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      return currentDate >= serverDate;
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('multiproff_lang', lang);
+      updateLanguageUI();
+      renderServers();
+    }
+
+    function updateLanguageUI() {
+      const t = i18n[currentLang];
+      
+      document.getElementById('txt-contact').innerText = t.contact;
+      document.getElementById('filter-all').innerText = t.filterAll;
+      document.getElementById('title-upcoming').innerText = t.titleUpcoming;
+      document.getElementById('title-opened').innerText = t.titleOpened;
+      document.getElementById('footer-info').innerText = t.footerInfo;
+
+      const btnRu = document.getElementById('btn-lang-ru');
+      const btnEn = document.getElementById('btn-lang-en');
+
+      if (currentLang === 'ru') {
+        btnRu.className = "px-2.5 py-1 rounded bg-amber-400 text-slate-950 font-bold transition shadow-sm";
+        btnEn.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white transition";
+      } else {
+        btnEn.className = "px-2.5 py-1 rounded bg-amber-400 text-slate-950 font-bold transition shadow-sm";
+        btnRu.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white transition";
+      }
+    }
+
+    function initData() {
+      updateLanguageUI();
+
+      if (GOOGLE_SHEET_CSV_URL && !GOOGLE_SHEET_CSV_URL.includes('ВСТАВЬ_СЮДА')) {
+        Papa.parse(GOOGLE_SHEET_CSV_URL, {
+          download: true,
+          header: true,
+          complete: function(results) {
+            servers = results.data.map((item, index) => ({
+              id: item.id || index,
+              name: item.name || '',
+              chronicle: item.chronicle || '',
+              rates: item.rates || '',
+              date: item.date || '',
+              isVip: item.isVip ? item.isVip.trim().toUpperCase() === 'TRUE' : false,
+              url: item.url || '#',
+              features: {
+                ru: item.features ? item.features.split(',').map(f => f.trim()) : [],
+                en: item.features_en ? item.features_en.split(',').map(f => f.trim()) : (item.features ? item.features.split(',').map(f => f.trim()) : [])
+              },
+              desc: {
+                ru: item.desc || '',
+                en: item.desc_en || item.desc || ''
+              }
+            })).filter(s => s.name !== '');
+
+            renderServers();
+          }
+        });
+      } else {
+        servers = defaultServers;
+        renderServers();
+      }
+    }
+
+    function renderServers() {
+      const t = i18n[currentLang];
+      const vipContainer = document.getElementById('vip-container');
+      const upcomingContainer = document.getElementById('upcoming-list');
+      const openedContainer = document.getElementById('opened-list');
+      
+      vipContainer.innerHTML = '';
+      upcomingContainer.innerHTML = '';
+      openedContainer.innerHTML = '';
+
+      const filtered = servers.filter(s => currentChronicleFilter === 'ALL' || s.chronicle === currentChronicleFilter);
+
+      const vipServer = filtered.find(s => s.isVip);
+      if (vipServer) {
+        vipContainer.innerHTML = createServerCardHtml(vipServer, true);
+      } else {
+        vipContainer.innerHTML = `
+          <div class="glass-panel border-2 border-dashed border-amber-400/50 rounded-xl p-5 text-center shadow-lg transition hover:border-amber-400">
+            <div class="text-amber-400 text-base font-bold mb-0.5">
+              ${t.vipTitle}
+            </div>
+            <p class="text-slate-300 text-xs">${t.vipDesc}</p>
+          </div>
+        `;
+      }
+
+      const nonVipServers = filtered.filter(s => !s.isVip);
+      const upcomingServers = nonVipServers.filter(s => !isServerOpened(s.date));
+      const openedServers = nonVipServers.filter(s => isServerOpened(s.date));
+
+      upcomingServers.sort((a, b) => parseServerDate(a.date) - parseServerDate(b.date));
+      openedServers.sort((a, b) => parseServerDate(b.date) - parseServerDate(a.date));
+
+      upcomingServers.forEach(server => {
+        upcomingContainer.innerHTML += createServerCardHtml(server, false);
+      });
+
+      openedServers.forEach(server => {
+        openedContainer.innerHTML += createServerCardHtml(server, false);
+      });
+    }
+
+    function createServerCardHtml(server, isVip) {
+      const t = i18n[currentLang];
+      const borderClass = isVip 
+        ? 'vip-card border-2 border-amber-400' 
+        : 'glass-panel hover:bg-slate-900/90 border border-slate-700/60';
+        
+      const vipBadge = isVip ? `
+        <div class="absolute -right-12 -top-12 bg-amber-400 text-slate-950 font-black text-xs px-12 py-8 rotate-45 flex items-end justify-center shadow-md">
+          VIP
+        </div>` : '';
+
+      const serverOpened = isServerOpened(server.date);
+      const statusDot = serverOpened 
+        ? `<span class="relative flex h-2.5 w-2.5">
+             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" title="${t.statusOnline}"></span>
+           </span>`
+        : `<span class="inline-flex rounded-full h-2.5 w-2.5 bg-amber-400" title="${t.statusUpcoming}"></span>`;
+
+      const activeFeatures = (server.features && server.features[currentLang]) ? server.features[currentLang] : (server.features.ru || []);
+      const activeDesc = (server.desc && server.desc[currentLang]) ? server.desc[currentLang] : (server.desc.ru || '');
+
+      const featuresHtml = activeFeatures.map(f => 
+        `<span class="bg-slate-950/80 border border-slate-700/80 text-[11px] text-amber-400 px-1.5 py-0.5 rounded">${f}</span>`
+      ).join('');
+
+      const formattedDate = formatDateForLang(server.date, currentLang);
+
+      // Вся карточка кликабельна (onclick="toggleAccordion"), клики по внешним ссылкам останавливают всплытие (event.stopPropagation)
+      return `
+        <div onclick="toggleAccordion(${server.id})" class="relative overflow-hidden ${borderClass} rounded-xl p-4 transition shadow-md cursor-pointer select-none">
+          ${vipBadge}
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              ${statusDot}
+              <div>
+                <a href="${server.url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="text-lg font-bold text-amber-400 hover:text-amber-300 transition flex items-center gap-1.5">
+                  ${server.name}
+                  <svg class="w-3.5 h-3.5 text-slate-400 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+                <div class="text-xs text-slate-400 font-medium">
+                  <span>${server.chronicle}</span> • <span class="text-slate-300 font-semibold">${server.rates}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 self-end sm:self-auto">
+              <span class="text-xs font-semibold px-2.5 py-1 rounded bg-slate-900/80 border border-slate-700/60 text-slate-300">
+                ${formattedDate}
+              </span>
+            </div>
+          </div>
+
+          <div id="accordion-${server.id}" class="accordion-content mt-1">
+            <div class="accordion-inner pt-3 border-t border-slate-700/40 text-xs text-slate-300 space-y-2.5">
+              <div class="flex flex-wrap gap-1">
+                ${featuresHtml}
+              </div>
+              <p class="leading-relaxed text-slate-300/90">
+                ${activeDesc}
+              </p>
+              <div>
+                <a href="${server.url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="inline-flex items-center gap-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-3 py-1.5 rounded transition shadow">
+                  ${t.visitWebsite}
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      `;
+    }
+
+    function toggleAccordion(id) {
+      const el = document.getElementById(`accordion-${id}`);
+      if (el) {
+        el.classList.toggle('open');
+      }
+    }
+
+    function filterChronicle(chronicle) {
+      currentChronicleFilter = chronicle;
+      renderServers();
+    }
+
+    window.addEventListener('DOMContentLoaded', initData);
   </script>
 </body>
 </html>
